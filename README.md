@@ -1,3 +1,5 @@
+**English** | [中文](./README.zh-CN.md)
+
 # Spec-Driven Develop
 
 A cross-platform AI agent skill that automates the pre-development workflow for large-scale complex tasks.
