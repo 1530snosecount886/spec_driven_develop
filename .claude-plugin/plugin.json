@@ -1,0 +1,7 @@
+{
+  "name": "spec-driven-develop",
+  "description": "Automates pre-development workflow for large-scale complex tasks: project analysis, task decomposition, progress tracking, and sub-SKILL generation. Use when the user describes a major project transformation, rewrite, migration, or any complex multi-phase development effort.",
+  "author": {
+    "name": "spec-driven-develop"
+  }
+}
