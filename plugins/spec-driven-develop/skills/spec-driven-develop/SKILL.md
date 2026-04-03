@@ -8,7 +8,7 @@ description: >-
   "迁移", "重构", "大规模", "规范驱动". Performs full project analysis, task decomposition,
   documentation generation, progress tracking setup, and task-specific sub-SKILL creation
   before any development begins.
-version: 1.2.0
+version: 1.3.0
 ---
 
 # Spec-Driven Develop
@@ -130,33 +130,32 @@ After loading your current state from MASTER.md, populate the platform's native 
 
 ## Phase 4: Task-Specific Sub-SKILL Generation
 
-**Goal**: Create a SKILL tailored to this specific task, encoding the interaction patterns and development standards needed for the actual implementation work.
+**Goal**: Create a project-level SKILL tailored to this specific task, encoding the interaction patterns and development standards needed for the actual implementation work.
 
 **Actions**:
 
-1. Ask the user where to install the sub-SKILL:
-   - **Project-level** (e.g., `.cursor/skills/` or project-local) — tied to this project, discarded when done
-   - **Global-level** (e.g., `~/.cursor/skills/` or `~/.codex/skills/`) — persists across projects
+1. The sub-SKILL is **always installed at project level** (e.g., `.cursor/skills/`, `.claude/commands/`, or project-local directory). Do not ask the user for installation location. This keeps the sub-SKILL co-located with the project it serves and avoids polluting the global skill space.
 
 2. Determine what the sub-SKILL should contain:
    - Task-specific coding standards and conventions for the target technology
    - The cross-conversation continuity protocol (read MASTER.md first)
+   - Project-specific architecture context and implementation notes
    - Guidance on how to update progress documents after completing each task
    - Phase-specific instructions relevant to the transformation type
    - **Parallel execution protocol**: How to use `task-executor` sub-agents to work on independent tasks simultaneously within each phase (see Parallel Development Execution below)
-   - The cleanup trigger: when all tasks are done, initiate Phase 6
+   - The archive trigger: when all tasks are done, initiate Phase 6
 
 3. **Delegate creation to the platform's native skill-creator**:
    - On **Claude Code** or **Codex**: Invoke the platform's built-in `skill-creator` skill, providing it with the task context, the desired skill name, description, and content outline. Let the native tool handle the actual file generation and installation.
-   - On **Cursor**: If a skill-creator skill is available, use it. Otherwise, create the SKILL.md directly following the standard frontmatter + markdown format and place it in the chosen directory.
+   - On **Cursor**: If a skill-creator skill is available, use it. Otherwise, create the SKILL.md directly following the standard frontmatter + markdown format and place it in the project's skills directory.
 
 4. The generated sub-SKILL should instruct the agent to:
    - Always read `docs/progress/MASTER.md` at the start of every conversation
    - Update the checkbox status in the relevant phase file after completing each task
    - Update the completion count and "Current Status" in MASTER.md
-   - When all checkboxes are checked, trigger Phase 6 (Cleanup)
+   - When all checkboxes are checked, trigger Phase 6 (Archive)
 
-**Output**: A task-specific SKILL installed at the user's chosen location.
+**Output**: A project-level task-specific SKILL.
 
 ---
 
@@ -237,33 +236,35 @@ The `task-breakdown.md` includes merge risk ratings for parallel lanes. Apply th
 
 ---
 
-## Phase 6: Cleanup
+## Phase 6: Archive
 
 **Trigger**: This phase activates when ALL checkboxes in `docs/progress/MASTER.md` are marked complete (`[x]`).
 
-**Goal**: Clean up temporary artifacts while preserving anything the user wants to keep.
+**Goal**: Archive all workflow artifacts for future reference and traceability, then clean up the working directories.
 
 **Actions**:
 
 1. Announce to the user that all tasks have been completed. Congratulate them.
 
-2. List all artifacts that were generated during this workflow:
-   - The entire `docs/` directory tree
-   - The task-specific sub-SKILL (name and location)
-   - Any other temporary files created during development
+2. Determine the archive directory name from the task name established in Phase 0. Sanitize it for use as a directory name (lowercase, hyphens instead of spaces, no special characters). The archive path is: `docs/archives/<project-name>/`
 
-3. Ask the user explicitly: "Which of these would you like to keep? Everything else will be removed."
-   - Present as a checklist so the user can easily pick items to preserve
-   - Common choices to highlight: analysis docs (useful as project documentation), the sub-SKILL (if reusable)
+3. Create the archive directory structure and move all artifacts into it:
+   - Move `docs/analysis/` to `docs/archives/<project-name>/analysis/`
+   - Move `docs/plan/` to `docs/archives/<project-name>/plan/`
+   - Move `docs/progress/` to `docs/archives/<project-name>/progress/`
+   - Move the project-level sub-SKILL file to `docs/archives/<project-name>/skill/SKILL.md`
+   - Move any other temporary files generated during development into the archive
 
-4. Delete the artifacts the user chose not to keep:
-   - Remove unchecked docs files/directories
-   - Uninstall/delete the sub-SKILL if not kept
-   - If the user keeps nothing, remove the entire `docs/` directory
+4. Create or update the archive index file `docs/archives/README.md`:
+   - If the file does not exist, create it with a header and the first project entry
+   - If it already exists, append a new entry for this project
+   - Each entry should include: project name, one-line description, date range (started — completed), and a link to the archived MASTER.md
 
-5. If any artifacts were preserved, suggest to the user that they might want to commit them to version control.
+5. After archiving, remove the now-empty `docs/analysis/`, `docs/plan/`, and `docs/progress/` directories from the project root's `docs/` folder, and remove the sub-SKILL's original directory if it is now empty. Only `docs/archives/` should remain under `docs/`.
 
-**Output**: A clean project with only the artifacts the user chose to keep.
+6. Suggest to the user that they might want to commit the archive to version control.
+
+**Output**: All artifacts preserved under `docs/archives/<project-name>/`, with an updated index at `docs/archives/README.md`.
 
 ---
 
@@ -281,6 +282,6 @@ The `task-breakdown.md` includes merge risk ratings for parallel lanes. Apply th
 
 6. **Respect the user's time**. Keep summaries concise. Use bullet points and tables, not walls of text.
 
-7. **Cleanup is not optional**. When all tasks are done, always enter Phase 6. Don't leave temporary artifacts behind.
+7. **Archiving is not optional**. When all tasks are done, always enter Phase 6. Archive all artifacts to `docs/archives/` for traceability — don't leave them scattered in working directories or delete them.
 
 8. **Dual-write progress updates**. When completing a task, update both the platform's native task tool (mark as completed) AND the Markdown progress files (check the box, update counts). The native tool provides real-time visibility; the Markdown files provide cross-conversation persistence. Neither replaces the other.

@@ -145,9 +145,9 @@ python scripts/export-progress.py docs/progress/
 
 The output includes project metadata, per-phase task details, and an overall completion summary.
 
-### Cleanup
+### Archive
 
-When all tasks are marked complete in the master progress file, the agent enters cleanup mode: it asks which artifacts you want to keep and removes the rest.
+When all tasks are marked complete in the master progress file, the agent enters archive mode: it moves all workflow artifacts (analysis, plan, progress, and a copy of the sub-SKILL) into `docs/archives/<project-name>/` and updates an index at `docs/archives/README.md`. Nothing is deleted — everything is preserved for future traceability.
 
 ## Project Structure
 

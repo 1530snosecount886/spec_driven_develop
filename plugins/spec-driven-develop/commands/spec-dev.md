@@ -71,24 +71,25 @@ Use the templates defined in the `spec-driven-develop` skill's `references/doc-t
 
 ### Phase 4: Sub-SKILL Generation
 
-1. Ask the user: project-level or global-level installation?
+1. Always install at **project level** (co-located with the project) — do not ask the user.
 2. Use the platform's native `skill-creator` skill to generate a task-specific SKILL containing:
    - Cross-conversation continuity protocol (read MASTER.md first)
    - Target technology coding standards
    - Progress update instructions
    - **Parallel execution protocol**: At each phase start, read parallel lanes from `task-breakdown.md` and launch `task-executor` sub-agents for independent lanes simultaneously. Use worktree isolation when available.
-   - Cleanup trigger when all tasks complete
+   - Archive trigger when all tasks complete
 
 ### Phase 5: Handoff
 
 Present all generated artifacts to the user in a summary. Ask: "Ready to begin development?"
 
-### Phase 6: Cleanup (triggered when all tasks complete)
+### Phase 6: Archive (triggered when all tasks complete)
 
 When all checkboxes in MASTER.md are done:
-1. List all generated artifacts
-2. Ask user which to keep
-3. Delete the rest
+1. Move all artifacts to `docs/archives/<project-name>/`
+2. Move the project-level sub-SKILL into the archive
+3. Create or update `docs/archives/README.md` index
+4. Remove the now-empty working directories
 
 ---
 
