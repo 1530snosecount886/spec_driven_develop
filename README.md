@@ -1,5 +1,18 @@
 **English** | [中文](./README.zh-CN.md)
 
+[![GitHub stars](https://img.shields.io/github/stars/zhu1090093659/spec_driven_develop?style=social)](https://github.com/zhu1090093659/spec_driven_develop/stargazers)
+[![Forks](https://img.shields.io/github/forks/zhu1090093659/spec_driven_develop?style=social)](https://github.com/zhu1090093659/spec_driven_develop/fork)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Platform](https://img.shields.io/badge/Platform-Claude%20Code%20%7C%20Codex%20%7C%20Cursor-FF6B6B.svg)](https://github.com)
+
+## Table of Contents
+- [Why Not Superpowers / oh-my-claude / ...?](#why-not-superpowers--oh-my-claude--)
+- [Platform Compatibility](#platform-compatibility)
+- [Installation](#installation)
+- [How It Works](#how-it-works)
+- [Friendly Links](#friendly-links)
+- [License](#license)
+
 # Spec-Driven Develop
 
 **One Markdown file. Any coding agent. Full pre-development automation.**
