@@ -8,7 +8,7 @@ description: >-
   "迁移", "重构", "大规模", "规范驱动". Performs full project analysis, task decomposition,
   documentation generation, progress tracking setup, and task-specific sub-SKILL creation
   before any development begins.
-version: 1.5.0
+version: 1.6.0
 ---
 
 # Spec-Driven Develop
@@ -69,19 +69,19 @@ After loading your current state from MASTER.md, populate the platform's native 
 
 1. Launch `project-analyzer` sub-agents **in parallel** to analyze the codebase concurrently. Split the work by focus area:
    - **Agent 1 — Architecture & Stack**: Project structure, directory layout, technology stack, entry points, build/run commands
-   - **Agent 2 — Module Inventory**: Each module's responsibility, public API surface, size, internal/external dependencies
-   - **Agent 3 — Risks & Patterns**: Transformation risks, complexity hotspots, platform-specific code, coding conventions
+   - **Agent 2 — Module Inventory**: Each module's responsibility, public API surface, size, internal/external dependencies. **Must evaluate each module against all five S.U.P.E.R principles** (Single Purpose, Unidirectional Flow, Ports over Implementation, Environment-Agnostic, Replaceable Parts) and assign a per-principle compliance rating.
+   - **Agent 3 — Risks & S.U.P.E.R Health**: Transformation risks, complexity hotspots, platform-specific code, coding conventions. **Must produce a S.U.P.E.R Architecture Health Summary** evaluating the overall codebase against each principle, identifying violation hotspots that become priority targets in the transformation plan.
 
-   Provide each agent with the confirmed task definition from Phase 0 so they can assess findings in context of the target transformation.
+   Provide each agent with the confirmed task definition from Phase 0 AND `references/super-philosophy.md` so they can assess findings against S.U.P.E.R principles in context of the target transformation.
 
    If sub-agents are not available on the current platform, perform the analysis sequentially yourself — the scope is the same either way.
 
 2. Consolidate agent outputs and resolve any contradictions or gaps. Write analysis documents to `docs/analysis/` using the templates in `references/templates/analysis.md`:
    - `project-overview.md` — Architecture, tech stack, entry points, build system
-   - `module-inventory.md` — Every module with: responsibility, dependencies, size, complexity rating
-   - `risk-assessment.md` — Technical risks, compatibility risks, complexity hotspots
+   - `module-inventory.md` — Every module with: responsibility, dependencies, size, complexity rating, **S.U.P.E.R compliance score per module**
+   - `risk-assessment.md` — Technical risks, compatibility risks, complexity hotspots, **S.U.P.E.R Architecture Health Summary with violation hotspots**
 
-**Output**: Complete `docs/analysis/` directory with three documents.
+**Output**: Complete `docs/analysis/` directory with three documents. The S.U.P.E.R assessment serves as the architectural baseline for all subsequent phases.
 
 ---
 
@@ -91,23 +91,23 @@ After loading your current state from MASTER.md, populate the platform's native 
 
 **Actions**:
 
-1. Launch `task-architect` sub-agents with the full analysis output from Phase 1. If the project is large enough to warrant multiple strategies, launch 2 agents exploring different decomposition approaches (e.g., bottom-up vs. strangler fig) and pick the better result.
+1. Launch `task-architect` sub-agents with the full analysis output from Phase 1 — including the S.U.P.E.R health assessment from `risk-assessment.md`. If the project is large enough to warrant multiple strategies, launch 2 agents exploring different decomposition approaches (e.g., bottom-up vs. strangler fig) and pick the better result.
 
    If sub-agents are not available, perform the decomposition yourself.
 
 2. The decomposition must produce:
-   - Phased approach with natural phase boundaries, ordered by dependency
-   - Concrete tasks for each phase, each with: description, priority (P0/P1/P2), effort (S/M/L/XL), dependencies, acceptance criteria
+   - Phased approach with natural phase boundaries, ordered by dependency. **Early phases should prioritize fixing S.U.P.E.R violation hotspots** identified in Phase 1, establishing clean architecture foundations before building new features.
+   - Concrete tasks for each phase, each with: description, priority (P0/P1/P2), effort (S/M/L/XL), dependencies, **S.U.P.E.R design drivers** (which principles are most relevant), acceptance criteria. **Every task's acceptance criteria implicitly includes passing the S.U.P.E.R Quick Check for its listed principles.**
    - **Parallel execution lanes**: For each phase, group tasks that have no mutual dependencies into lanes that can run simultaneously. Assess merge risk (file overlap) between lanes.
    - Dependency graph as a Mermaid diagram — use subgraphs to visualize parallel lanes
    - Milestones at natural phase boundaries
 
 3. Write planning documents to `docs/plan/` using the templates in `references/templates/plan.md`:
-   - `task-breakdown.md` — All phases and tasks with full detail, including parallel lane assignments
+   - `task-breakdown.md` — All phases and tasks with full detail, including parallel lane assignments and **S.U.P.E.R design constraints**
    - `dependency-graph.md` — Mermaid diagram showing task/phase dependencies and parallel lanes
    - `milestones.md` — Milestone definitions with target criteria
 
-**Output**: Complete `docs/plan/` directory with three documents.
+**Output**: Complete `docs/plan/` directory with three documents. Every task is annotated with its S.U.P.E.R design drivers.
 
 ---
 
@@ -151,10 +151,11 @@ Use the templates in `references/templates/progress.md` for all progress documen
 1. The sub-SKILL is **always installed at project level** (e.g., `.cursor/skills/`, `.claude/commands/`, or project-local directory). Do not ask the user for installation location. This keeps the sub-SKILL co-located with the project it serves and avoids polluting the global skill space.
 
 2. Determine what the sub-SKILL should contain (see `references/templates/sub-skill.md` for the full content outline):
-   - **S.U.P.E.R architecture principles** from `references/super-philosophy.md` — the architectural coding standard for all generated code
-   - Task-specific coding standards and conventions for the target technology
+   - **S.U.P.E.R architecture principles — MUST be inlined verbatim**, not merely referenced. The executing agent may not have access to `references/super-philosophy.md`, so the full five principles with litmus tests must be embedded directly in the sub-SKILL body. This is the #1 most important section.
+   - **S.U.P.E.R Code Review Checklist** — a 10-point checklist that the agent must run after completing every task, before marking it as done. Include the scoring rule: all pass = proceed, 1-2 fail = fix first, 3+ fail = stop and refactor.
+   - Task-specific coding standards and conventions for the target technology, **framed through S.U.P.E.R principles** (e.g., error handling aligned with U, dependency injection aligned with P, config management aligned with E)
    - The cross-conversation continuity protocol (read MASTER.md first)
-   - Project-specific architecture context and implementation notes
+   - Project-specific architecture context, including the **S.U.P.E.R violation hotspots** from `docs/analysis/risk-assessment.md` that must be addressed
    - Guidance on how to update progress documents after completing each task
    - Phase-specific instructions relevant to the transformation type
    - **Parallel execution protocol**: reference `references/parallel-protocol.md` for the full protocol
@@ -166,6 +167,7 @@ Use the templates in `references/templates/progress.md` for all progress documen
 
 4. The generated sub-SKILL should instruct the agent to:
    - Always read `docs/progress/MASTER.md` at the start of every conversation
+   - **Run the S.U.P.E.R Code Review Checklist** after completing each task, before marking it done
    - Update the checkbox status in the relevant phase file after completing each task
    - Update the completion count and "Current Status" in MASTER.md
    - When all checkboxes are checked, trigger Phase 6 (Archive)
