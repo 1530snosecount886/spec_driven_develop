@@ -1,6 +1,6 @@
 # Sub-SKILL Template
 
-When generating a task-specific sub-SKILL in Phase 4, delegate to the platform's native skill-creator. The sub-SKILL is always installed at **project level** to keep it co-located with the project it serves.
+When generating a task-specific sub-SKILL in Phase 5, delegate to the platform's native skill-creator. The sub-SKILL is always installed at **project level** to keep it co-located with the project it serves.
 
 ---
 
@@ -120,4 +120,4 @@ Reference `references/parallel-protocol.md` for the full protocol. Summarize key
 
 ### 8. Archive Trigger
 
-When all tasks are done, initiate Phase 6 (Archive). Move all artifacts to `docs/archives/<project>/`.
+When all tasks are done, initiate Phase 7 (Archive). Move all artifacts to `docs/archives/<project>/`.

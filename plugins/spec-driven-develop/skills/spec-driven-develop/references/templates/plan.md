@@ -1,6 +1,6 @@
 # Plan Document Templates
 
-Templates for the three documents generated in Phase 2 (Task Decomposition). Output to `docs/plan/`.
+Templates for the three documents generated in Phase 3 (Task Decomposition). Output to `docs/plan/`.
 
 ---
 

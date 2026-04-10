@@ -16,6 +16,6 @@ These rules apply to every agent and every phase in the Spec-Driven Develop work
 
 6. **Respect the user's time**. Keep summaries concise. Use bullet points and tables, not walls of text.
 
-7. **Archiving is not optional**. When all tasks are done, always enter Phase 6. Archive all artifacts to `docs/archives/` for traceability — don't leave them scattered in working directories or delete them.
+7. **Archiving is not optional**. When all tasks are done, always enter Phase 7. Archive all artifacts to `docs/archives/` for traceability — don't leave them scattered in working directories or delete them.
 
 8. **Dual-write progress updates**. When completing a task, update both the platform's native task tool (mark as completed) AND the Markdown progress files (check the box, update counts). The native tool provides real-time visibility; the Markdown files provide cross-conversation persistence. Neither replaces the other.

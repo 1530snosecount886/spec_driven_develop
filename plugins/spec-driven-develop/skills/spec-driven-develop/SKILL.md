@@ -8,7 +8,7 @@ description: >-
   "迁移", "重构", "大规模", "规范驱动". Performs full project analysis, task decomposition,
   documentation generation, progress tracking setup, and task-specific sub-SKILL creation
   before any development begins.
-version: 1.6.0
+version: 1.7.0
 ---
 
 # Spec-Driven Develop
@@ -20,9 +20,9 @@ You are executing the **Spec-Driven Development** workflow — a standardized pr
 | Path               | Default Value                | Purpose                                    |
 |:-------------------|:-----------------------------|:-------------------------------------------|
 | Analysis output    | `docs/analysis/`             | Phase 1 analysis documents                 |
-| Plan output        | `docs/plan/`                 | Phase 2 planning documents                 |
-| Progress output    | `docs/progress/`             | Phase 3 tracking documents (incl. MASTER.md) |
-| Archive output     | `docs/archives/<project>/`   | Phase 6 archived artifacts                 |
+| Plan output        | `docs/plan/`                 | Phase 3 planning documents                 |
+| Progress output    | `docs/progress/`             | Phase 4 tracking documents (incl. MASTER.md) |
+| Archive output     | `docs/archives/<project>/`   | Phase 7 archived artifacts                 |
 | Sub-SKILL install  | Project level (auto-detect)  | Platform-specific: `.cursor/skills/`, `.claude/commands/`, or project-local |
 
 Templates for all generated documents are in `references/templates/`. Behavioral rules are in `references/behavioral-rules.md`. The parallel execution protocol is in `references/parallel-protocol.md`.
@@ -38,32 +38,28 @@ After loading your current state from MASTER.md, populate the platform's native 
 
 ---
 
-## Phase 0: Intent Recognition & Confirmation
+## Phase 0: Quick Intent Capture
 
-**Goal**: Understand exactly what the user wants to accomplish and eliminate all ambiguity.
+**Goal**: Capture the user's high-level transformation direction in 1-2 sentences — just enough to give Phase 1 analysis a focus, without deep clarification.
 
 **Actions**:
 
-1. Identify the user's core intent from their message. Extract:
+1. Extract the big-picture direction from the user's message:
    - The type of transformation (language migration, framework change, architecture overhaul, new feature development, etc.)
-   - The target state (e.g., "rewrite in Rust", "migrate to microservices")
-   - Any constraints or preferences mentioned
+   - The rough target state (e.g., "rewrite in Rust", "migrate to microservices")
+   - Any constraints or preferences the user explicitly mentioned
 
-2. Ask the user structured clarifying questions. At minimum, confirm:
-   - **Scope**: Which parts of the project are in scope? The entire codebase or specific modules?
-   - **Target**: What is the target technology/architecture/state?
-   - **Constraints**: Are there hard constraints (timeline, backward compatibility, specific libraries, deployment targets)?
-   - **Priorities**: What matters most — performance, maintainability, feature parity, or something else?
+2. Summarize the direction back to the user in 1-2 sentences. Do NOT ask deep clarifying questions at this stage — the analysis in Phase 1 will reveal the project reality needed for informed questions. Simply confirm: "I understand you want to [direction]. Let me first analyze the current project so I can ask you the right questions."
 
-3. Summarize your understanding back to the user and get explicit confirmation before proceeding.
+3. If the user's intent is completely unclear (e.g., they said something vague like "improve this project"), ask ONE high-level question to determine the transformation type. Keep it brief.
 
-**Output**: A clear, confirmed task definition that will guide all subsequent phases.
+**Output**: A preliminary direction statement that guides Phase 1's analysis focus. This is NOT the final task definition — that comes in Phase 2 after analysis.
 
 ---
 
 ## Phase 1: Deep Project Analysis
 
-**Goal**: Build a comprehensive understanding of the current codebase.
+**Goal**: Build a comprehensive understanding of the current codebase, informed by the preliminary direction from Phase 0.
 
 **Actions**:
 
@@ -72,7 +68,7 @@ After loading your current state from MASTER.md, populate the platform's native 
    - **Agent 2 — Module Inventory**: Each module's responsibility, public API surface, size, internal/external dependencies. **Must evaluate each module against all five S.U.P.E.R principles** (Single Purpose, Unidirectional Flow, Ports over Implementation, Environment-Agnostic, Replaceable Parts) and assign a per-principle compliance rating.
    - **Agent 3 — Risks & S.U.P.E.R Health**: Transformation risks, complexity hotspots, platform-specific code, coding conventions. **Must produce a S.U.P.E.R Architecture Health Summary** evaluating the overall codebase against each principle, identifying violation hotspots that become priority targets in the transformation plan.
 
-   Provide each agent with the confirmed task definition from Phase 0 AND `references/super-philosophy.md` so they can assess findings against S.U.P.E.R principles in context of the target transformation.
+   Provide each agent with the preliminary direction from Phase 0 AND `references/super-philosophy.md` so they can assess findings against S.U.P.E.R principles in context of the intended transformation.
 
    If sub-agents are not available on the current platform, perform the analysis sequentially yourself — the scope is the same either way.
 
@@ -85,13 +81,42 @@ After loading your current state from MASTER.md, populate the platform's native 
 
 ---
 
-## Phase 2: Task Decomposition
+## Phase 2: Intent Refinement & Confirmation
+
+**Goal**: With the project fully analyzed, engage the user in a grounded, high-quality discussion to finalize the task definition. The analysis from Phase 1 enables asking precise, informed questions that would have been impossible before understanding the codebase.
+
+**Actions**:
+
+1. Present key findings from Phase 1 as context for the discussion:
+   - Brief architecture summary (how the project is structured today)
+   - Notable S.U.P.E.R health issues (violation hotspots, architectural risks)
+   - Module coupling and complexity highlights relevant to the intended transformation
+
+2. Ask the user **targeted clarifying questions grounded in the analysis**. These should be specific and informed, not generic. Examples of the quality expected:
+   - "Module A and Module B are tightly coupled with circular dependencies. Do you want to decouple them as part of this migration, or preserve the current structure?"
+   - "The risk assessment shows 3 modules with hardcoded environment assumptions. Should we fix these (aligning with S.U.P.E.R E principle) or defer that to a separate task?"
+   - "The current codebase has no interface contracts between modules. Do you want to introduce schema-defined boundaries (S.U.P.E.R P principle) during this transformation?"
+
+   At minimum, confirm:
+   - **Scope**: Which parts of the project are in scope? Reference specific modules from the inventory.
+   - **Target**: Confirm the target technology/architecture/state, now informed by current architecture reality.
+   - **Constraints**: Hard constraints (timeline, backward compatibility, specific libraries, deployment targets)?
+   - **Priorities**: What matters most — performance, maintainability, feature parity, or something else? Reference the risk assessment to help the user prioritize.
+   - **S.U.P.E.R priorities**: Which architectural violations should be fixed during this transformation vs. deferred?
+
+3. Summarize the refined understanding back to the user and get explicit confirmation before proceeding.
+
+**Output**: A clear, confirmed task definition grounded in project reality. This is the authoritative task definition that guides all subsequent phases (Phase 3-7).
+
+---
+
+## Phase 3: Task Decomposition
 
 **Goal**: Break down the transformation into manageable, trackable tasks organized in phases, with explicit parallel execution lanes.
 
 **Actions**:
 
-1. Launch `task-architect` sub-agents with the full analysis output from Phase 1 — including the S.U.P.E.R health assessment from `risk-assessment.md`. If the project is large enough to warrant multiple strategies, launch 2 agents exploring different decomposition approaches (e.g., bottom-up vs. strangler fig) and pick the better result.
+1. Launch `task-architect` sub-agents with the full analysis output from Phase 1 AND the confirmed task definition from Phase 2 — including the S.U.P.E.R health assessment from `risk-assessment.md`. If the project is large enough to warrant multiple strategies, launch 2 agents exploring different decomposition approaches (e.g., bottom-up vs. strangler fig) and pick the better result.
 
    If sub-agents are not available, perform the decomposition yourself.
 
@@ -111,7 +136,7 @@ After loading your current state from MASTER.md, populate the platform's native 
 
 ---
 
-## Phase 3: Progress Tracking Documentation
+## Phase 4: Progress Tracking Documentation
 
 **Goal**: Create a document-driven progress tracking system that survives across conversations.
 
@@ -120,7 +145,7 @@ After loading your current state from MASTER.md, populate the platform's native 
 Use the templates in `references/templates/progress.md` for all progress documents.
 
 1. Create the **master control file** `docs/progress/MASTER.md` with:
-   - Task name and description (from Phase 0)
+   - Task name and description (from Phase 2)
    - Link to each analysis document
    - Link to each plan document
    - A summary table of all phases with completion percentage
@@ -142,7 +167,7 @@ Use the templates in `references/templates/progress.md` for all progress documen
 
 ---
 
-## Phase 4: Task-Specific Sub-SKILL Generation
+## Phase 5: Task-Specific Sub-SKILL Generation
 
 **Goal**: Create a project-level SKILL tailored to this specific task, encoding the interaction patterns and development standards needed for the actual implementation work.
 
@@ -159,7 +184,7 @@ Use the templates in `references/templates/progress.md` for all progress documen
    - Guidance on how to update progress documents after completing each task
    - Phase-specific instructions relevant to the transformation type
    - **Parallel execution protocol**: reference `references/parallel-protocol.md` for the full protocol
-   - The archive trigger: when all tasks are done, initiate Phase 6
+   - The archive trigger: when all tasks are done, initiate Phase 7
 
 3. **Delegate creation to the platform's native skill-creator**:
    - On **Claude Code** or **Codex**: Invoke the platform's built-in `skill-creator` skill, providing it with the task context, the desired skill name, description, and content outline. Let the native tool handle the actual file generation and installation.
@@ -170,24 +195,24 @@ Use the templates in `references/templates/progress.md` for all progress documen
    - **Run the S.U.P.E.R Code Review Checklist** after completing each task, before marking it done
    - Update the checkbox status in the relevant phase file after completing each task
    - Update the completion count and "Current Status" in MASTER.md
-   - When all checkboxes are checked, trigger Phase 6 (Archive)
+   - When all checkboxes are checked, trigger Phase 7 (Archive)
 
 **Output**: A project-level task-specific SKILL.
 
 ---
 
-## Phase 5: Handoff & Summary
+## Phase 6: Handoff & Summary
 
 **Goal**: Present all preparation artifacts to the user and confirm readiness to begin development.
 
 **Actions**:
 
 1. Present a structured summary to the user:
-   - Task definition (from Phase 0)
+   - Task definition (from Phase 2)
    - Key findings from analysis (high-level, from Phase 1)
-   - Phased plan overview with task counts (from Phase 2)
-   - Progress tracking system description (from Phase 3)
-   - Sub-SKILL name and installation location (from Phase 4)
+   - Phased plan overview with task counts (from Phase 3)
+   - Progress tracking system description (from Phase 4)
+   - Sub-SKILL name and installation location (from Phase 5)
 
 2. List all generated artifacts:
    - `docs/analysis/project-overview.md`
@@ -206,7 +231,7 @@ Use the templates in `references/templates/progress.md` for all progress documen
 
 ---
 
-## Phase 6: Archive
+## Phase 7: Archive
 
 **Trigger**: This phase activates when ALL checkboxes in `docs/progress/MASTER.md` are marked complete (`[x]`).
 
@@ -216,7 +241,7 @@ Use the templates in `references/templates/progress.md` for all progress documen
 
 1. Announce to the user that all tasks have been completed. Congratulate them.
 
-2. Determine the archive directory name from the task name established in Phase 0. Sanitize it for use as a directory name (lowercase, hyphens instead of spaces, no special characters). The archive path is: `docs/archives/<project-name>/`. See `references/templates/archive.md` for the target directory structure and index template.
+2. Determine the archive directory name from the task name established in Phase 2. Sanitize it for use as a directory name (lowercase, hyphens instead of spaces, no special characters). The archive path is: `docs/archives/<project-name>/`. See `references/templates/archive.md` for the target directory structure and index template.
 
 3. Create the archive directory structure and move all artifacts into it:
    - Move `docs/analysis/` to `docs/archives/<project-name>/analysis/`

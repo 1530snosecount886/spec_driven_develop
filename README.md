@@ -27,28 +27,31 @@ No SDK. No runtime. No dependencies. Just Markdown files that any AI coding agen
 
 ## What It Does
 
-When you tell your agent something like "rewrite this project in Rust" or "migrate to a microservice architecture", Spec-Driven Develop kicks in with a 6-phase preparation pipeline:
+When you tell your agent something like "rewrite this project in Rust" or "migrate to a microservice architecture", Spec-Driven Develop kicks in with a 7-phase preparation pipeline:
 
 ```
-Phase 0  Intent Recognition        Clarify scope, target state, constraints
+Phase 0  Quick Intent Capture      Capture high-level direction (1-2 sentences)
     |
 Phase 1  Deep Analysis             Analyze architecture, inventory modules,
     |                              assess risks — with S.U.P.E.R health evaluation
     |
-Phase 2  Task Decomposition        Break work into phases, tasks, parallel lanes —
+Phase 2  Intent Refinement         Ask targeted questions grounded in analysis,
+    |                              confirm scope, priorities, and constraints
+    |
+Phase 3  Task Decomposition        Break work into phases, tasks, parallel lanes —
     |                              each task annotated with S.U.P.E.R design drivers
     |
-Phase 3  Progress Tracking         Generate MASTER.md + per-phase detail files
+Phase 4  Progress Tracking         Generate MASTER.md + per-phase detail files
     |                              for cross-conversation continuity
     |
-Phase 4  Sub-SKILL Generation      Create a project-level SKILL with inlined
+Phase 5  Sub-SKILL Generation      Create a project-level SKILL with inlined
     |                              S.U.P.E.R principles and code review checklist
     |
-Phase 5  Handoff                   Present all artifacts, confirm readiness
+Phase 6  Handoff                   Present all artifacts, confirm readiness
     |
    ...  Development Phases         Iterative implementation with progress tracking
     |
-Phase 6  Archive                   Preserve all artifacts for traceability
+Phase 7  Archive                   Preserve all artifacts for traceability
 ```
 
 A master progress file (`docs/progress/MASTER.md`) serves as the agent's memory anchor across conversations. No matter how many sessions a task spans, the agent always knows where things stand.
@@ -72,8 +75,9 @@ S.U.P.E.R is not a footnote — it is the design philosophy that drives every ph
 S.U.P.E.R isn't just a reference document the agent might read — it's woven into the workflow at every level:
 
 - **Phase 1 — Analysis**: Every module gets a per-principle compliance score (`S🟢 U🟡 P🔴 E🟢 R🟡`). The risk assessment includes a S.U.P.E.R Architecture Health Summary with violation hotspots.
-- **Phase 2 — Planning**: Each task is annotated with its S.U.P.E.R design drivers (which principles matter most for that task). Early phases prioritize fixing violation hotspots before building new features.
-- **Phase 4 — Sub-SKILL**: The full S.U.P.E.R principles are **inlined verbatim** into the generated sub-SKILL (not just referenced), along with a mandatory **10-point code review checklist** that the agent must pass after every task:
+- **Phase 2 — Intent Refinement**: Analysis findings are presented to the user so they can make informed decisions about scope and S.U.P.E.R priorities before task decomposition begins.
+- **Phase 3 — Planning**: Each task is annotated with its S.U.P.E.R design drivers (which principles matter most for that task). Early phases prioritize fixing violation hotspots before building new features.
+- **Phase 5 — Sub-SKILL**: The full S.U.P.E.R principles are **inlined verbatim** into the generated sub-SKILL (not just referenced), along with a mandatory **10-point code review checklist** that the agent must pass after every task:
 
   | Check | Principle |
   |:------|:----------|
@@ -231,10 +235,10 @@ spec_driven_develop/
 │   │       ├── behavioral-rules.md           # Non-negotiable workflow rules
 │   │       └── templates/                    # Document templates (one per concern)
 │   │           ├── analysis.md               # Phase 1: with S.U.P.E.R health assessment
-│   │           ├── plan.md                   # Phase 2: with S.U.P.E.R design constraints
-│   │           ├── progress.md               # Phase 3: cross-conversation tracking
-│   │           ├── archive.md                # Phase 6: artifact preservation
-│   │           └── sub-skill.md              # Phase 4: with inlined S.U.P.E.R + checklist
+│   │           ├── plan.md                   # Phase 3: with S.U.P.E.R design constraints
+│   │           ├── progress.md               # Phase 4: cross-conversation tracking
+│   │           ├── archive.md                # Phase 7: artifact preservation
+│   │           └── sub-skill.md              # Phase 5: with inlined S.U.P.E.R + checklist
 │   ├── agents/                               # Claude Code sub-agents (optional)
 │   │   ├── project-analyzer.md
 │   │   ├── task-architect.md

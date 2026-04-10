@@ -1,6 +1,6 @@
 # Archive Templates
 
-Templates for Phase 6 (Archive). Output to `docs/archives/`.
+Templates for Phase 7 (Archive). Output to `docs/archives/`.
 
 ---
 

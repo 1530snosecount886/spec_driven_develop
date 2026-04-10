@@ -1,6 +1,6 @@
 # Analysis Document Templates
 
-Templates for the three documents generated in Phase 1 (Deep Project Analysis). Output to `docs/analysis/`.
+Templates for the three documents generated in Phase 1 (Deep Project Analysis). Output to `docs/analysis/`. These documents serve dual purpose: they feed into Phase 2 (Intent Refinement & Confirmation) for grounded user discussion, and into Phase 3 (Task Decomposition) for planning.
 
 ---
 
@@ -9,8 +9,8 @@ Templates for the three documents generated in Phase 1 (Deep Project Analysis). 
 ```markdown
 # Project Overview
 
-## Task Definition
-<!-- One-sentence summary of what this transformation aims to achieve -->
+## Preliminary Direction
+<!-- One-sentence summary of the intended transformation direction from Phase 0. This will be refined into a confirmed task definition in Phase 2 after the user reviews this analysis. -->
 
 ## Current Architecture
 <!-- High-level architecture diagram (Mermaid) and description -->

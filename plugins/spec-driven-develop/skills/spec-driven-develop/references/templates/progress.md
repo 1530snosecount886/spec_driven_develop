@@ -1,6 +1,6 @@
 # Progress Document Templates
 
-Templates for the tracking documents generated in Phase 3. Output to `docs/progress/`.
+Templates for the tracking documents generated in Phase 4 (Progress Tracking Documentation). Output to `docs/progress/`.
 
 ---
 
